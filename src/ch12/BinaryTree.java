@@ -2,12 +2,31 @@ package ch12;
 
 import java.util.Stack;
 
-public class BinaryTree {
+public class BinaryTree<T> {
+    private static int count = 0;   // 用于建树
+
+    /**
+     * 根据前序遍历列表建树
+     * @param preorderList  前序遍历列表
+     * @param btn   根节点
+     * @return      建好的树的根节点
+     */
+    private BinaryTreeNode<T> buildBinaryTree(BinaryTreeNode<T> btn, T[] preorderList){
+        if(count >= preorderList.length || preorderList[count] == null){
+            return null;    // 空树
+        }
+        btn = new BinaryTreeNode(preorderList[count]);  // 生成根节点
+        count ++;
+        btn.insertLchild(buildBinaryTree(btn.lchild, preorderList));  // 生成左孩子
+        count ++;
+        btn.insertRchild(buildBinaryTree(btn.rchild, preorderList));  // 生成右孩子
+        return btn;
+    }
     /**
      * 前序遍历---递归版
      * @param btn   根节点
      */
-    public void preorderTreeWalk(BinaryTreeNode btn){
+    public void preorderTreeWalk(BinaryTreeNode<T> btn){
         if(btn != null){
             System.out.printf(btn.key + "\t");
             preorderTreeWalk(btn.lchild);
@@ -19,8 +38,8 @@ public class BinaryTree {
      * 前序遍历---使用栈的非递归版
      * @param btn
      */
-    public void preorderTreeWalkWithStack(BinaryTreeNode btn){
-        Stack<BinaryTreeNode> stack = new Stack<>();
+    public void preorderTreeWalkWithStack(BinaryTreeNode<T> btn){
+        Stack<BinaryTreeNode<T>> stack = new Stack<>();
         BinaryTreeNode node = null;
         if(btn != null){
             stack.push(btn);
@@ -44,7 +63,7 @@ public class BinaryTree {
      * 中序遍历---递归版
      * @param btn   根节点
      */
-    public void inorderTreeWalk(BinaryTreeNode btn){
+    public void inorderTreeWalk(BinaryTreeNode<T> btn){
         if(btn != null){
             inorderTreeWalk(btn.lchild);
             System.out.printf(btn.key + "\t");
@@ -56,8 +75,8 @@ public class BinaryTree {
      * 中序遍历---使用栈的非递归版
      * @param btn
      */
-    public void inorderTreeWalkWithStack(BinaryTreeNode btn){
-        Stack<BinaryTreeNode> stack = new Stack<>();
+    public void inorderTreeWalkWithStack(BinaryTreeNode<T> btn){
+        Stack<BinaryTreeNode<T>> stack = new Stack<>();
         BinaryTreeNode node = btn;
         while(node != null || !stack.isEmpty()){    //node非空或栈非空
             if(node != null){   // node非空
@@ -79,7 +98,7 @@ public class BinaryTree {
      * 后序遍历---递归版
      * @param btn   根节点
      */
-    public void postorderTreeWalk(BinaryTreeNode btn){
+    public void postorderTreeWalk(BinaryTreeNode<T> btn){
         if(btn != null){
             postorderTreeWalk(btn.lchild);
             postorderTreeWalk(btn.rchild);
@@ -91,8 +110,8 @@ public class BinaryTree {
      * 后序遍历---使用栈的非递归版
      * @param btn   根节点
      */
-    public void postorderTreeWalkWtithStack(BinaryTreeNode btn) {
-        Stack<BinaryTreeNode> stack = new Stack<>();
+    public void postorderTreeWalkWtithStack(BinaryTreeNode<T> btn) {
+        Stack<BinaryTreeNode<T>> stack = new Stack<>();
         BinaryTreeNode node = btn;
         while (btn != null) {
             for (; btn.lchild != null; btn = btn.lchild) {
@@ -109,5 +128,27 @@ public class BinaryTree {
             stack.push(btn);
             btn = btn.rchild;
         }
+    }
+
+    public static void main(String[] args){
+        Character[] pl = new Character[]{'a', 'b', 'c', null, null, 'd', 'e', null, 'g', null, null, 'f', null, null, null};
+        BinaryTree<Character> bt = new BinaryTree();
+        BinaryTreeNode<Character> root = null;
+        root = bt.buildBinaryTree(root, pl);
+
+        System.out.println("preorder tree walk:");
+        bt.preorderTreeWalk(root);
+        System.out.println("\npreorder tree walk with stack:");
+        bt.preorderTreeWalkWithStack(root);
+
+        System.out.println("\ninorder tree walk:");
+        bt.inorderTreeWalk(root);
+        System.out.println("\ninorder tree walk with stack:");
+        bt.inorderTreeWalkWithStack(root);
+
+        System.out.println("\npostorder tree walk:");
+        bt.postorderTreeWalk(root);
+        System.out.println("\npostorder tree walk with stack:");
+        bt.postorderTreeWalkWtithStack(root);
     }
 }

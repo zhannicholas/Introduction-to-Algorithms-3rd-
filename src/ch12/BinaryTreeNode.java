@@ -1,15 +1,17 @@
 package ch12;
 
+import javax.swing.text.Position;
+
 /**
  * 二叉树节点类
  */
-class BinaryTreeNode {
-    Object key = null;   // 键
-    BinaryTreeNode lchild = null;    // 左孩子
-    BinaryTreeNode rchild = null;    // 右孩子
-    BinaryTreeNode parent = null;    // 父节点
+class BinaryTreeNode<T> {
+    T key = null;   // 键
+    BinaryTreeNode<T> lchild = null;    // 左孩子
+    BinaryTreeNode<T> rchild = null;    // 右孩子
+    BinaryTreeNode<T> parent = null;    // 父节点
 
-    public BinaryTreeNode(Object keyValue){
+    public BinaryTreeNode(T keyValue){
         key = keyValue;
     }
 
@@ -18,7 +20,7 @@ class BinaryTreeNode {
      * @param lc    左孩子
      * @return      父节点
      */
-    public BinaryTreeNode insertLchild(BinaryTreeNode lc){
+    public BinaryTreeNode<T> insertLchild(BinaryTreeNode<T> lc){
         if(lc != null){
             lchild = lc;
             lc.parent = this;
@@ -32,11 +34,17 @@ class BinaryTreeNode {
      * @param rc    右孩子
      * @return      父节点
      */
-    public BinaryTreeNode insertRchild(BinaryTreeNode rc){
+    public BinaryTreeNode<T> insertRchild(BinaryTreeNode<T> rc){
         if(rc != null){
             rchild = rc;
             rc.parent = this;
         }
         return this;
+    }
+
+    public void deleteNode(){
+        lchild = null;
+        rchild = null;
+        parent = null;
     }
 }
